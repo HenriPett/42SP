@@ -5,14 +5,12 @@ unsigned int	ft_strlcpy(char *dest, char *src, unsigned int size)
 	chars_copied = 0;
 	while (*src != '\0' && chars_copied < size)
 	{
-		dest[chars_copied] = src[chars_copied];
+		*dest++ = *src++;
 		++chars_copied;
 	}
 	if (chars_copied == size)
-	{
 		--dest;
-	}
-	dest[chars_copied] = '\0';
+	*dest = '\0';
 	while (*src != '\0')
 	{
 		++chars_copied;
