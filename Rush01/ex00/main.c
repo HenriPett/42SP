@@ -1,101 +1,36 @@
 #include <unistd.h>
-#include "empilha_caixa.h"
 
-int	imprime_tabela(char tabela[TAM][TAM])
+int	rush(int rules[3][4][4], int matriz[4][4]);
+
+int	str_to_vetor_int(char *arg, int rules[3][4][4])
 {
-	int	y;
-	int	x;
+	int	i;
+	int	j;
 
-	y = -1;
-	while (++y < TAM)
+	i = 0;
+	while (i < 4)
 	{
-		x = -1;
-		while (++x < TAM)
+		j = 0;
+		while (j < 4)
 		{
-			write(1, &tabela[y][x], 1);
-			if (x != (TAM - 1))
-				write(1, " ", 1);
+			if (*arg < '1' || *arg > '4')
+				return (0);
+			rules[0][i][j] = *arg - '0';
+			arg += 2;
+			j++;
 		}
-		write(1, "\n", 1);
+		i++;
 	}
 	return (1);
 }
 
-int	resolucao(char tabela[TAM][TAM], t_parametros *parametros)
+int	main(int argc, char **argv)
 {
-	int	x;
-	int	y;
-	int	valor;
+	int	rules[3][4][4];
+	int	matriz[4][4];
 
-	if (procura_caso_vazio(tabela, &x, &y))
-	{
-		valor = '0';
-		while (++valor <= (TAM + '0'))
-		{
-			if (pode_colocar_valor(tabela, x, y, valor))
-			{
-				tabela[y][x] = valor;
-				if (x == (TAM - 1) && !linha_eh_valida (tabela, parametros, y))
-					continue ;
-				if (y == (TAM - 1) && !coluna_eh_valida(tabela, parametros, x))
-					continue ;
-				if (resolucao(tabela, parametros) == 1)
-					return (1);
-			}
-		}
-		tabela[y][x] = 0;
+	if (argc == 2 && str_to_vetor_int(argv[1], rules) && rush(rules, matriz))
 		return (0);
-	}
-	return (1);
-}
-
-int	argumento_eh_valido(char *av, t_parametros *parametros)
-{
-	int		i;
-	char	*ptr_parametros;
-
-	i = -1;
-	ptr_parametros = &parametros->acima[0];
-	while (av[++i] != '\0')
-	{
-		if (i % 2 != 0 && av[i] == ' ')
-			continue ;
-		if (i % 2 != 0 && av[i] != ' ')
-			return (0);
-		*ptr_parametros = av[i] - '0';
-		ptr_parametros++;
-	}
-	if (TAM == 4 && i != 31)
-		return (0);
-	if (TAM == 6 && i != 47)
-		return (0);
-	return (1);
-}
-
-int	main(int ac, char **av)
-{
-	t_parametros	parametros;
-	char			tabela[TAM][TAM];
-	int				i;
-	int				j;
-
-	if (ac != 2 || !argumento_eh_valido(av[1], &parametros))
-	{
-		write(1, "Error\n", 6);
-		return (0);
-	}
-	i = -1;
-	while (++i < TAM)
-	{
-		j = -1;
-		while (++j < TAM)
-			tabela[i][j] = 0;
-	}
-	if (!resolucao(tabela, &parametros))
-	{
-		write(1, "Error\n", 6);
-		return (0);
-	}
-	imprime_tabela(tabela);
+	write(1, "Error\n", 6);
 	return (1);
 }
