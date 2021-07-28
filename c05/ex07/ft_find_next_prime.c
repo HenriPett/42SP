@@ -16,16 +16,14 @@ int	ft_is_prime(int nb)
 
 int	ft_find_next_prime(int nb)
 {
-	int	i;
-
-	if (nb < 2)
-		nb = 2;
-	i = nb;
-	while (i < 2 * nb)
+	while (ft_is_prime(nb) == 0)
 	{
-		if (ft_is_prime(i) == 1)
-			return (i);
-		i++;
+		if (nb % 2 != 0 && nb > 2)
+		{
+			nb = nb + 2;
+		}
+		else
+			nb++;
 	}
-	return (0);
+	return (nb);
 }

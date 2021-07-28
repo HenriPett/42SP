@@ -1,18 +1,13 @@
 int	ft_sqrt(int nb)
 {
 	int	i;
-	int	sq;
+	int	sign;
 
-	i = 1;
-	sq = 1;
-	if (nb == 0)
-		return (0);
-	while (i * i < nb)
-	{
-		i++;
-	}
-	if ((nb % i) == 0)
+	i = 0;
+	sign = 1 + ((nb < 0) * -2);
+	while (i * i < nb && ((i < 0) == (nb < 0)))
+		i += sign;
+	if (i * i == nb)
 		return (i);
-	else
-		return (0);
+	return (0);
 }
